@@ -38,9 +38,9 @@ import socket
 from logging import getLogger
 from os import path
 from datetime import timedelta
-from err import openssl_error
-from err import SSL_ERROR_NONE
-from util import _EC_KEY, _BIO
+from .err import openssl_error
+from .err import SSL_ERROR_NONE
+from .util import _EC_KEY, _BIO
 import ctypes
 from ctypes import CDLL
 from ctypes import CFUNCTYPE
@@ -65,8 +65,8 @@ if sys.platform.startswith('win'):
     libcrypto = CDLL(cryptodll_path)
     libssl = CDLL(ssldll_path)
 else:
-    libcrypto = CDLL("libcrypto.so.1.0.0")
-    libssl = CDLL("libssl.so.1.0.0")
+    libcrypto = CDLL("libcrypto.so.1.0.2")
+    libssl = CDLL("libssl.so.1.0.2")
 
 #
 # Integer constants - exported

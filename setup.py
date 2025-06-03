@@ -45,14 +45,7 @@ if __name__ == "__main__":
     args = parser.parse_known_args()[0]
     dist = "bdist_wheel" in args.command and not args.help
     plat_dist = dist and args.plat_name
-    if dist:
-        from pypandoc import convert
-        long_description = convert("README.md", "rst")\
-                           .translate({ord("\r"): None})
-        with open("README.rst", "wb") as readme:
-            readme.write(long_description)
-    else:
-        long_description = open("README.rst").read()
+    long_description = "DTLS Library (Patched)"
     top_package_plat_files_file = "dtls_package_files"
     if dist:
         if plat_dist:
@@ -65,7 +58,8 @@ if __name__ == "__main__":
                 raise ValueError("Unknown platform")
             prebuilt_path = prebuilt_platform_root + "/" + platform
             config = {"MANIFEST_DIR": prebuilt_path}
-            execfile(prebuilt_path + "/manifest.pycfg", config)
+            exec(open(path.join(prebuilt_path, "manifest.pycfg")).read(), config)
+            # execfile(prebuilt_path + "/manifest.pycfg", config)
             top_package_plat_files = map(lambda x: prebuilt_path + "/" + x,
                                          config["FILES"])
             # Save top_package_plat_files with the distribution archive
@@ -117,7 +111,6 @@ if __name__ == "__main__":
           data_files=[('', [top_package_plat_files_file])] if plat_dist else []
     )
     if dist:
-        remove("README.rst")
         for extra_file in top_package_extra_files:
             remove("dtls/" + extra_file)
         if plat_dist:
